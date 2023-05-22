@@ -2,7 +2,7 @@
  * @Author: 舒飞 1017981699@qq.com
  * @Date: 2023-05-19 14:38:07
  * @LastEditors: 舒飞 1017981699@qq.com
- * @LastEditTime: 2023-05-19 18:01:34
+ * @LastEditTime: 2023-05-22 17:34:20
  */
 export default {
   bind (el, binding) {
@@ -58,13 +58,14 @@ export default {
       }
       // 判断是否需要更新，避免进入死循环
       if (newValue !== el.value) {
-        el.value = newValue
+        el.value =newValue==='-0'? 0 : newValue
         el.dispatchEvent(new Event('input')) // 通知v-model更新
       }
     }
     // 失去焦点事件
     el.blurHander = function () {
-      el.value = el.formatVal(el.value,true)
+      const isNegative  = el.value.includes('-')
+      el.value = (isNegative?'-':'') +  el.formatVal(el.value,true)
       el.dispatchEvent(new Event('input')) // 通知v-model更新
     }
     el.addEventListener('input', el.inputHandler)
